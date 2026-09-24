@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Student Well-being — AI Nexus</title>
+<meta name="description" content="An early-support system that identifies students who may need help and connects them with the right campus resources. PS-011, Team AI Nexus.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌱</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#132A28; --bg:#F4F7F5; --panel:#FFFFFF; --line:#DDE6E1;
+    --support:#2E7D6B; --support-bg:#E4F1EC;
+    --attention:#B8792A; --attention-bg:#FBF0DE;
+    --urgent:#B24736; --urgent-bg:#FAE7E2;
+    --muted:#5C6E68;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .cta{display:inline-flex;align-items:center;gap:8px;margin-top:30px;background:var(--ink);color:var(--bg);text-decoration:none;font-size:14px;font-weight:600;padding:12px 20px;border-radius:5px;transition:opacity .15s}
+  .cta:hover{opacity:.85}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+  .hero-text{animation:rise .6s ease both}
+  .hero-card{animation:rise .6s ease .12s both}
+  @media(prefers-reduced-motion:reduce){.hero .wrap>div,.hero-card{animation:none}}
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;margin:0;letter-spacing:-0.01em}
+  p{margin:0}
+  a{color:inherit}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 32px}
+  section{padding:88px 0}
+  @media(max-width:700px){section{padding:56px 0}.wrap{padding:0 20px}}
+
+  /* nav */
+  nav{position:sticky;top:0;z-index:10;background:rgba(244,247,245,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;padding:18px 32px}
+  .brand{font-family:'Fraunces',serif;font-size:19px}
+  .navlinks{display:flex;gap:28px;font-size:14px;color:var(--muted)}
+  .navlinks a{text-decoration:none}
+  .navlinks a:hover{color:var(--ink)}
+  @media(max-width:700px){.navlinks{display:none}}
+
+  /* hero */
+  .hero .wrap{display:grid;grid-template-columns:1.3fr 1fr;gap:56px;align-items:center;padding-top:72px;padding-bottom:72px}
+  @media(max-width:800px){.hero .wrap{grid-template-columns:1fr}}
+  .tag{font-size:14px;color:var(--support);font-weight:600}
+  .hero h1{font-size:56px;line-height:1.04;margin-top:14px}
+  @media(max-width:700px){.hero h1{font-size:38px}}
+  .hero p.lede{margin-top:22px;font-size:18px;color:var(--muted);max-width:46ch}
+  .hero .meta{margin-top:28px;font-size:14px;color:var(--muted)}
+  .hero-card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:26px}
+  .hero-card h3{font-size:16px}
+  .hero-card .stat{display:flex;justify-content:space-between;padding:12px 0;border-top:1px solid var(--line);font-size:14px}
+  .hero-card .stat:first-of-type{border-top:none}
+  .hero-card .stat b{font-family:'Fraunces',serif;font-weight:500;font-size:18px}
+
+  /* problem */
+  .grid4{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden;margin-top:40px}
+  @media(max-width:700px){.grid4{grid-template-columns:1fr}}
+  .grid4 .cell{background:var(--panel);padding:30px}
+  .cell h3{font-size:18px;margin-bottom:10px}
+  .cell p{color:var(--muted);font-size:15px}
+  .kicker{color:var(--muted);font-size:16px;margin-top:14px;max-width:56ch}
+
+  /* pipeline */
+  .pipeline{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:44px;position:relative}
+  @media(max-width:800px){.pipeline{grid-template-columns:1fr;gap:18px}}
+  .step{padding-right:26px;position:relative}
+  .step .n{font-family:'Fraunces',serif;font-size:14px;color:var(--support)}
+  .step h3{font-size:17px;margin-top:10px}
+  .step p{color:var(--muted);font-size:14px;margin-top:8px}
+  .step:not(:last-child)::after{content:"→";position:absolute;right:-4px;top:0;color:var(--line);font-size:20px}
+  @media(max-width:800px){.step:not(:last-child)::after{display:none}}
+
+  /* demo */
+  .demo-panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;margin-top:40px;display:grid;grid-template-columns:1fr 1fr}
+  @media(max-width:800px){.demo-panel{grid-template-columns:1fr}}
+  .demo-inputs{padding:34px;border-right:1px solid var(--line)}
+  @media(max-width:800px){.demo-inputs{border-right:none;border-bottom:1px solid var(--line)}}
+  .field{margin-bottom:22px}
+  .field label{display:flex;justify-content:space-between;font-size:14px;color:var(--muted);margin-bottom:8px}
+  .field label span{color:var(--ink);font-weight:600}
+  input[type=range]{width:100%;accent-color:var(--support)}
+  .checkline{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted)}
+  .demo-output{padding:34px;display:flex;flex-direction:column;justify-content:center}
+  .band{display:inline-block;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600;width:fit-content}
+  .score{font-family:'Fraunces',serif;font-size:52px;margin:18px 0 6px}
+  .rec{font-size:14px;color:var(--muted);margin-top:14px;line-height:1.6}
+  .rec b{color:var(--ink)}
+
+  /* tech */
+  .tech-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
+  @media(max-width:700px){.tech-grid{grid-template-columns:1fr 1fr}}
+  .tech{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:20px}
+  .tech .abbr{font-family:'Fraunces',serif;font-size:22px;color:var(--support)}
+  .tech h4{font-size:14px;font-weight:600;margin-top:8px}
+  .tech p{font-size:13px;color:var(--muted);margin-top:6px}
+
+  /* architecture */
+  .flow{display:flex;align-items:stretch;gap:0;margin-top:44px;overflow-x:auto}
+  .flow .node{flex:1;min-width:150px;background:var(--panel);border:1px solid var(--line);padding:20px;text-align:left}
+  .flow .node + .node{border-left:none}
+  .flow .node:first-child{border-radius:6px 0 0 6px}
+  .flow .node:last-child{border-radius:0 6px 6px 0}
+  .flow .node h4{font-size:14px}
+  .flow .node p{font-size:12.5px;color:var(--muted);margin-top:8px}
+  .safeguard{margin-top:22px;font-size:14px;color:var(--muted);border-left:2px solid var(--support);padding-left:16px}
+  .safeguard b{color:var(--ink)}
+
+  /* trust */
+  .trust-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
+  @media(max-width:700px){.trust-grid{grid-template-columns:1fr}}
+  .trust-grid .cell{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:24px}
+
+  /* roadmap */
+  .roadmap{margin-top:40px;display:flex;flex-direction:column;gap:0}
+  .rstep{display:grid;grid-template-columns:90px 1fr;gap:20px;padding:20px 0;border-top:1px solid var(--line)}
+  .rstep:last-child{border-bottom:1px solid var(--line)}
+  .rstep .yr{color:var(--support);font-family:'Fraunces',serif;font-size:15px}
+  .rstep h4{font-size:16px;font-weight:600}
+  .rstep p{font-size:14px;color:var(--muted);margin-top:6px}
+
+  /* team */
+  .team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:40px}
+  @media(max-width:700px){.team-grid{grid-template-columns:1fr 1fr}}
+  .member{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:22px}
+  .member .role{font-size:12px;color:var(--support);font-weight:600}
+  .member h4{font-size:16px;margin-top:8px}
+  .member .reg{font-size:12px;color:var(--muted);margin-top:10px}
+
+  footer{border-top:1px solid var(--line);padding:36px 0}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <div class="brand">AI Nexus</div>
+  <div class="navlinks">
+    <a href="#problem">Problem</a><a href="#solution">Solution</a><a href="#demo">Demo</a><a href="#tech">Tech</a><a href="#trust">Trust</a><a href="#team">Team</a>
+  </div>
+</div></nav>
+
+<section class="hero"><div class="wrap">
+  <div class="hero-text">
+    <div class="tag">PS‑011 · Human Development, Health &amp; Social Impact</div>
+    <h1>Student Well‑being</h1>
+    <p class="lede">An early‑support system that identifies students who may need help, and connects them with the right campus resources — before a quiet struggle becomes a crisis.</p>
+    <div class="meta">Team AI Nexus · Round 1 Idea Pitch</div>
+    <a class="cta" href="#demo">See the risk model in action ↓</a>
+  </div>
+  <div class="hero-card">
+    <h3>What this system does</h3>
+    <div class="stat"><span>Signals tracked</span><b>4 sources</b></div>
+    <div class="stat"><span>Detection loop</span><b>Weekly</b></div>
+    <div class="stat"><span>Human in the loop</span><b>Always</b></div>
+    <div class="stat"><span>Outcome</span><b>Earlier care</b></div>
+  </div>
+</div></section>
+
+<section id="problem"><div class="wrap">
+  <h2>Why students fall through the cracks</h2>
+  <p class="kicker">Four pressures build up silently during a semester, and most institutions have no data‑driven way to notice until a student is already in crisis.</p>
+  <div class="grid4">
+    <div class="cell"><h3>Academic pressure</h3><p>Heavy workloads, exams and grade anxiety build up silently over a semester.</p></div>
+    <div class="cell"><h3>Financial stress</h3><p>Tuition, hostel fees and daily expenses create pressure students rarely voice.</p></div>
+    <div class="cell"><h3>Social isolation</h3><p>Peer friction and a lack of belonging quietly erode focus and mental health.</p></div>
+    <div class="cell"><h3>Hidden struggles</h3><p>Institutions lack an early, data‑driven way to spot a student who is at risk.</p></div>
+  </div>
+</div></section>
+
+<section id="solution"><div class="wrap">
+  <h2>A four‑step early‑intervention pipeline</h2>
+  <p class="kicker">Everyday student data, turned into timely, human support — without replacing the humans who provide it.</p>
+  <div class="pipeline">
+    <div class="step"><div class="n">01</div><h3>Collect signals</h3><p>Attendance, grade trends, LMS activity and optional mood check‑ins.</p></div>
+    <div class="step"><div class="n">02</div><h3>Analyze &amp; detect</h3><p>A model scores risk patterns across academic, financial and social indicators.</p></div>
+    <div class="step"><div class="n">03</div><h3>Alert &amp; triage</h3><p>Counsellors get a prioritized, privacy‑respecting outreach dashboard.</p></div>
+    <div class="step"><div class="n">04</div><h3>Connect support</h3><p>Students are matched to counselling, financial aid or peer groups.</p></div>
+  </div>
+</div></section>
+
+<section id="demo"><div class="wrap">
+  <h2>Try the risk‑signal model</h2>
+  <p class="kicker">A simplified, working version of the scoring engine — move the signals a student's data might show, and see how the system would triage them.</p>
+  <div class="demo-panel">
+    <div class="demo-inputs">
+      <div class="field"><label>Attendance <span id="attV">80%</span></label><input type="range" id="att" min="0" max="100" value="80"></div>
+      <div class="field"><label>Assignment submission rate <span id="subV">75%</span></label><input type="range" id="sub" min="0" max="100" value="75"></div>
+      <div class="field"><label>Self‑reported mood (1–5) <span id="moodV">3</span></label><input type="range" id="mood" min="1" max="5" value="3"></div>
+      <div class="field"><label>LMS engagement (days/week) <span id="lmsV">4</span></label><input type="range" id="lms" min="0" max="7" value="4"></div>
+      <div class="field checkline"><input type="checkbox" id="fin"><label for="fin">Flagged financial‑aid inquiry this term</label></div>
+    </div>
+    <div class="demo-output">
+      <span class="band" id="band">Monitor</span>
+      <div class="score" id="score">—</div>
+      <div class="rec" id="rec"></div>
+    </div>
+  </div>
+</div></section>
+
+<section id="tech"><div class="wrap">
+  <h2>Technology stack</h2>
+  <p class="kicker">Built for reliable prediction, fast APIs and an approachable interface.</p>
+  <div class="tech-grid">
+    <div class="tech"><div class="abbr">Py</div><h4>Python</h4><p>Core language for data processing and model development.</p></div>
+    <div class="tech"><div class="abbr">ML</div><h4>AI / Machine learning</h4><p>Risk‑scoring model trained on academic and engagement signals.</p></div>
+    <div class="tech"><div class="abbr">DA</div><h4>Data analytics</h4><p>Trend analysis across attendance, grades and check‑in data.</p></div>
+    <div class="tech"><div class="abbr">Rx</div><h4>React</h4><p>Student‑ and counsellor‑facing web dashboard and portal.</p></div>
+    <div class="tech"><div class="abbr">Fa</div><h4>FastAPI</h4><p>Lightweight, high‑performance backend serving predictions.</p></div>
+    <div class="tech"><div class="abbr">DB</div><h4>Database</h4><p>Secure storage for student records with access controls.</p></div>
+  </div>
+</div></section>
+
+<section id="architecture"><div class="wrap">
+  <h2>System architecture</h2>
+  <div class="flow">
+    <div class="node"><h4>Student signals</h4><p>Attendance, LMS logs, mood check‑ins.</p></div>
+    <div class="node"><h4>Data layer</h4><p>Pre‑processing, feature extraction &amp; encryption.</p></div>
+    <div class="node"><h4>AI engine</h4><p>Risk pattern detection &amp; prioritization score.</p></div>
+    <div class="node"><h4>Counsellor board</h4><p>Privacy‑first dashboard for staff outreach.</p></div>
+    <div class="node"><h4>Support portal</h4><p>1‑on‑1 counselling, peer groups &amp; resources.</p></div>
+  </div>
+  <p class="safeguard"><b>Human‑in‑the‑loop safeguard:</b> the model surfaces early risk signals; counsellors make every final assessment and support decision.</p>
+</div></section>
+
+<section id="trust"><div class="wrap">
+  <h2>Trust &amp; governance</h2>
+  <p class="kicker">Proactive support, delivered with full transparency, privacy and oversight.</p>
+  <div class="trust-grid">
+    <div class="cell"><h3>Privacy by design</h3><p>Strict encryption standards and access limited to authorized staff only.</p></div>
+    <div class="cell"><h3>Human review, always</h3><p>Risk scores are outreach indicators, never automated diagnoses.</p></div>
+    <div class="cell"><h3>Fairness audits</h3><p>Regular bias evaluation to prevent algorithmic skew across demographics.</p></div>
+  </div>
+</div></section>
+
+<section id="roadmap"><div class="wrap">
+  <h2>Where this goes next</h2>
+  <div class="roadmap">
+    <div class="rstep"><div class="yr">01</div><div><h4>Wider data signals</h4><p>Incorporate sleep, campus Wi‑Fi activity and library usage for a fuller well‑being picture.</p></div></div>
+    <div class="rstep"><div class="yr">02</div><div><h4>Mobile companion app</h4><p>A student‑facing app for private check‑ins, mood tracking and one‑tap resource requests.</p></div></div>
+    <div class="rstep"><div class="yr">03</div><div><h4>Proactive alerts</h4><p>Move from reactive dashboards to instant, early‑warning notifications for advisors.</p></div></div>
+    <div class="rstep"><div class="yr">04</div><div><h4>Multi‑campus scaling</h4><p>Pilot across departments, then scale the platform to partner institutions.</p></div></div>
+  </div>
+</div></section>
+
+<section id="team"><div class="wrap">
+  <h2>Team AI Nexus</h2>
+  <div class="team-grid">
+    <div class="member"><div class="role">Leader · Project coordination</div><h4>Vidhi Gupta</h4><div class="reg">Reg. RA268124203003</div></div>
+    <div class="member"><div class="role">AI / ML &amp; backend</div><h4>Anant Jain</h4><div class="reg">Reg. RA268124203016</div></div>
+    <div class="member"><div class="role">Research &amp; documentation</div><h4>Mahi Verma</h4><div class="reg">Reg. RA268124203043</div></div>
+    <div class="member"><div class="role">Frontend &amp; UI</div><h4>Tanshi</h4><div class="reg">Reg. RA268124203011</div></div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <span>Team AI Nexus · PS‑011 · Student Well‑being</span>
+  <span>Built for live deployment — drag this folder into Netlify to go live.</span>
+</div></footer>
+
+<script>
+(function(){
+  var att=document.getElementById('att'), sub=document.getElementById('sub'),
+      mood=document.getElementById('mood'), lms=document.getElementById('lms'), fin=document.getElementById('fin');
+  var attV=document.getElementById('attV'), subV=document.getElementById('subV'),
+      moodV=document.getElementById('moodV'), lmsV=document.getElementById('lmsV');
+  var band=document.getElementById('band'), score=document.getElementById('score'), rec=document.getElementById('rec');
+
+  function compute(){
+    attV.textContent=att.value+'%'; subV.textContent=sub.value+'%'; moodV.textContent=mood.value; lmsV.textContent=lms.value;
+
+    var risk = (100-att.value)*0.3 + (100-sub.value)*0.25 + (5-mood.value)*10 + (7-lms.value)*4 + (fin.checked?12:0);
+    risk = Math.max(0, Math.min(100, Math.round(risk)));
+    score.textContent = risk;
+
+    var b,c,bg,r;
+    if(risk < 35){ b='Thriving'; c='var(--support)'; bg='var(--support-bg)';
+      r='<b>No action needed.</b> Signals look healthy — the student stays in normal monitoring.'; }
+    else if(risk < 65){ b='Monitor'; c='var(--attention)'; bg='var(--attention-bg)';
+      r='<b>Suggested action:</b> a light‑touch nudge — peer community invite or an optional academic advising check‑in.'; }
+    else { b='Needs outreach'; c='var(--urgent)'; bg='var(--urgent-bg)';
+      r='<b>Suggested action:</b> priority counsellor outreach' + (fin.checked? ' plus a financial‑aid referral.' : '.'); }
+
+    band.textContent=b; band.style.color=c; band.style.background=bg; score.style.color=c; rec.innerHTML=r;
+  }
+  [att,sub,mood,lms,fin].forEach(function(el){ el.addEventListener('input', compute); });
+  compute();
+})();
+</script>
+</body>
+</html>
