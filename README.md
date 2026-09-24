@@ -74,10 +74,10 @@ This is a static site, so any static host works. Fastest option — Netlify manu
 
 | Name | Role | Reg. No. |
 |---|---|---|
-| Vidhi Gupta | Leader · Project Coordination | RA268124203003 |
-| Anant Jain | AI / ML & Backend | RA268124203016 |
-| Mahi Verma | Research & Documentation | RA268124203043 |
-| Tanshi | Frontend & UI | RA268124203011 |
+| Vidhi Gupta | Leader · Project Coordination | RA2681242030003 |
+| Anant Jain | AI / ML & Backend | RA2681242030016 |
+| Mahi Verma | Research & Documentation | RA2681242030043 |
+| Tanshi | Frontend & UI | RA2681242030011 |
 
 ## Status
 
